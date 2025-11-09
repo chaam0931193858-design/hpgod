@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>สำหรับแฟน — 1Y2M</title>
+<style>
+  :root{
+    --bg:#ffd7e6;
+    --accent:#ff6fa3;
+    --accent-dark:#ff3b82;
+    --text:#5b2b3a;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;padding:0}
+  body{
+    font-family:"Noto Sans Thai","Arial Rounded MT Bold",sans-serif;
+    background:radial-gradient(circle at 10% 10%,#fff0f6 0%,var(--bg) 35%,#ffe6f1 100%);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  h1{color:var(--accent-dark);margin-bottom:16px}
+  .heart-container{
+    position:relative;
+    width:180px;
+    height:160px;
+    cursor:pointer;
+  }
+  .heart-shape{
+    position:absolute;
+    width:100px;
+    height:100px;
+    background:linear-gradient(180deg,var(--accent),var(--accent-dark));
+    transform:rotate(-45deg);
+    top:30px; left:40px;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(255,105,165,0.3);
+  }
+  .heart-shape::before,
+  .heart-shape::after{
+    content:"";
+    position:absolute;
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    background:linear-gradient(180deg,var(--accent),var(--accent-dark));
+  }
+  .heart-shape::before{
+    top:-50px;
+    left:0;
+  }
+  .heart-shape::after{
+    top:0;
+    left:50px;
+  }
+  .heart-label{
+    position:absolute;
+    top:58%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    color:white;
+    font-size:32px;
+    font-weight:bold;
+    text-shadow:0 2px 8px rgba(0,0,0,0.2);
+  }
+  .floating-heart{
+    position:fixed;
+    width:20px;
+    height:20px;
+    transform:rotate(-45deg);
+    pointer-events:none;
+    background:linear-gradient(180deg,var(--accent),var(--accent-dark));
+    border-radius:6px;
+    opacity:0;
+  }
+  .floating-heart::before,
+  .floating-heart::after{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    background:inherit;
+  }
+  .floating-heart::before{top:-50%;left:0}
+  .floating-heart::after{left:50%;top:0}
+  .text-box{
+    margin-top:20px;
+    padding:16px 20px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.7);
+    color:var(--text);
+    font-weight:600;
+    box-shadow:0 4px 10px rgba(255,105,165,0.1);
+    opacity:0;
+    transition:opacity 1s ease;
+  }
+  .text-box.show{
+    opacity:1;
+  }
+  .text-box li{
+    opacity:0;
+    transform:translateY(10px);
+    transition:opacity 1s ease, transform 1s ease;
+  }
+  .text-box li.show{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .popup{
+    position:fixed;
+    bottom:100px;
+    left:50%;
+    transform:translateX(-50%);
+    background:white;
+    padding:10px 18px;
+    border-radius:12px;
+    font-weight:bold;
+    color:var(--accent-dark);
+    box-shadow:0 6px 14px rgba(255,105,165,0.2);
+    opacity:0;
+  }
+  .popup.show{
+    animation:pop 1.2s ease forwards;
+  }
+  @keyframes pop{
+    0%{transform:translateX(-50%) translateY(20px);opacity:0}
+    20%{transform:translateX(-50%) translateY(-10px);opacity:1}
+    100%{transform:translateX(-50%) translateY(-50px);opacity:0}
+  }
+</style>
+</head>
+<body>
+  <h1>สำหรับคนพิเศษ 💕</h1>
+  <div class="heart-container" id="heartBtn">
+    <div class="heart-shape"></div>
+    <div class="heart-label">1Y2M</div>
+  </div>
+
+  <div class="text-box" id="textBox">
+    <ol>
+      <li>รักแฟนมากๆเลยน้า</li>
+      <li>ขอบคุณนะที่ยังรักกัน</li>
+      <li>อยู่แบบนี้ไปนานๆน้า</li>
+    </ol>
+  </div>
+
+  <div class="popup" id="popup">I Love You 💖</div>
+
+<script>
+(function(){
+  const heartBtn=document.getElementById('heartBtn');
+  const popup=document.getElementById('popup');
+  const textBox=document.getElementById('textBox');
+  const listItems=textBox.querySelectorAll('li');
+
+  // ฟังก์ชันหัวใจลอย
+  function floatingHeart(){
+    const heart=document.createElement('div');
+    heart.className='floating-heart';
+    const size=10+Math.random()*15;
+    heart.style.width=heart.style.height=size+'px';
+    heart.style.left=Math.random()*window.innerWidth+'px';
+    document.body.appendChild(heart);
+    const anim=heart.animate([
+      {transform:`translateY(0) rotate(-45deg)`,opacity:1},
+      {transform:`translateY(-${window.innerHeight}px) rotate(45deg)`,opacity:0}
+    ],{
+      duration:4000+Math.random()*3000,
+      easing:'ease-out'
+    });
+    anim.onfinish=()=>heart.remove();
+  }
+  setInterval(floatingHeart,300);
+
+  // เมื่อกดหัวใจ
+  heartBtn.onclick=()=>{
+    popup.classList.add('show');
+    setTimeout(()=>popup.classList.remove('show'),4000); // I Love You 4 วิ
+
+    // หลัง 3 วิ แสดงกล่องข้อความ
+    setTimeout(()=>{
+      textBox.classList.add('show');
+      // แสดงทีละข้อห่างกัน 1 วิ
+      listItems.forEach((li,i)=>{
+        setTimeout(()=>li.classList.add('show'),i*1000);
+      });
+    },3000);
+  };
+})();
+</script>
+</body>
+</html>
